@@ -3,10 +3,6 @@
 `default_nettype wire
 
 module RAM32 (
-`ifdef USE_POWER_PINS
-    input VPWR,
-    input VGND,
-`endif
     input CLK,
     input [3:0] WE0,
     input EN0,

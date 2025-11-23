@@ -68,10 +68,6 @@ SUCH DAMAGE.
 
 module tt_um_lisa
 (
-`ifdef USE_POWER_PINS
-    input                  VPWR,
-    input                  VGND,
-`endif
    input   wire [7:0]      ui_in,            // Connected to the input switches
    output  wire [7:0]      uo_out,           // Connected to the 7 segment display
    input   wire [7:0]      uio_in,
@@ -471,10 +467,6 @@ module tt_um_lisa
    // ==========================================================================
    RAM32 ram1
    (
-`ifdef USE_POWER_PINS
-      .VPWR(VPWR),
-      .VGND(VGND),
-`endif
       .CLK                       ( clk                       ),
       .WE0                       ( ram_we                    ),
       .EN0                       ( ram_en                    ),

@@ -147,7 +147,7 @@ Uses a 14 (or 16) bit program word.  Shown is the 14-bit version.  For 16-bit, e
 */
 
 `define PWORD_SIZE      16
-`define WANT_BF16
+//`define WANT_BF16
 
 module lisa_core
 #(
@@ -625,14 +625,18 @@ module lisa_core
                    inst[`PWORD_SIZE-1 -: 6]  == 6'b111001 ||         // inx
                    inst[`PWORD_SIZE-1 -: 12] == 12'b101000000000 ||  // shl,shr,ldc
                    inst[`PWORD_SIZE-1 -: 12] == 12'b100010101101 ||  // cpx
-                   op_restc ||                                       // Restore c
-                   op_fcmp;                                          // Floating point compare
+`ifdef WANT_BF16
+                   op_fcmp ||                                        // Floating point compare
+`endif
+                   op_restc;                                         // Restore c
 
    // Sign wires for facc and fx
    wire  s_facc;
    wire  s_fx;
+`ifdef WANT_BF16
    assign s_facc = facc[15];
    assign s_fx   = fx[inst[1:0]][15];
+`endif
 
    // Create value to load to cflag
    always @*
@@ -671,6 +675,7 @@ module lisa_core
                c_val = cflag_save;
 
             // fcmp  Test if facc > fx
+`ifdef WANT_BF16
             else if (op_fcmp)
             begin
                if ((~s_facc & s_fx)                   ||          // If facc positive and fx negative
@@ -684,6 +689,7 @@ module lisa_core
                else
                   c_val = 1'b0;
             end
+`endif
          end
       5'b10001:                          // cpx
          case (1'b1)
@@ -1256,7 +1262,9 @@ module lisa_core
                                                                (inst[0] ? cflag : ~zflag) :
                                                                 inst[0]};
                op_notz:             {zflag_load, zflag_val} = {1'b1, acc != 8'h00};
+`ifdef WANT_BF16
                op_fcmp:             {zflag_load, zflag_val} = {1'b1, facc == fx[inst[1:0]]};
+`endif
             endcase
       end
    end
