@@ -290,8 +290,8 @@ module lisa_io_mux
       // UIO bit 4
       case (io_mux_bits[1:0])
          2'h1:    s_uio_out[4] = lisa_portc_i[0];
-         2'h2:    s_uio_out[4] = scl_pad_o;
-         2'h3:    s_uio_out[4] = psram_mod ? sio2_o : ce[1];
+         2'h2:    s_uio_out[4] = psram_mod ? sio2_o : scl_pad_o;
+         2'h3:    s_uio_out[4] = ce[1];
          default: s_uio_out[4] = 1'b0;
       endcase
 
@@ -315,7 +315,7 @@ module lisa_io_mux
       case (io_mux_bits[7:6])
          2'h0:    s_uio_out[7] = sda_pad_o;
          2'h1:    s_uio_out[7] = lisa_portc_i[3];
-         2'h2:    s_uio_out[7] = sio3_o;
+         2'h2:    s_uio_out[7] = psram_mod ? 1'b1 : sio3_o;
          2'h3:    s_uio_out[7] = sio3_o;
       endcase
    end
@@ -331,7 +331,7 @@ module lisa_io_mux
       // UIO bit 4
       case (io_mux_bits[1:0])
          2'h1:    s_uio_oe[4] = lisa_portc_dir_i[0];
-         2'h2:    s_uio_oe[4] = scl_padoen_o;
+         2'h2:    s_uio_oe[4] = psram_mod ? sio_oe[2] : scl_padoen_o;
          2'h3:    s_uio_oe[4] = 1'b1;  // CE[1]
          default: s_uio_oe[4] = 1'b0;
       endcase
@@ -339,7 +339,7 @@ module lisa_io_mux
       // UIO bit 5
       case (io_mux_bits[3:2])
          2'h1:    s_uio_oe[5] = lisa_portc_dir_i[1];
-         2'h2:    s_uio_oe[5] = sda_padoen_o;
+         2'h2:    s_uio_oe[5] = psram_mod ? sio_oe[3] : sda_padoen_o;
          2'h3:    s_uio_oe[5] = 1'b0;
          default: s_uio_oe[5] = 1'b0;
       endcase
@@ -348,7 +348,7 @@ module lisa_io_mux
       case (io_mux_bits[5:4])
          2'h0:    s_uio_oe[6] = scl_padoen_o;
          2'h1:    s_uio_oe[6] = lisa_portc_dir_i[2];
-         2'h2:    s_uio_oe[6] = sio_oe[2];            // DQ2
+         2'h2:    s_uio_oe[6] = psram_mod ? 1'b1 : sio_oe[2];            // DQ2
          2'h3:    s_uio_oe[6] = sio_oe[2];
       endcase
 
@@ -356,7 +356,7 @@ module lisa_io_mux
       case (io_mux_bits[7:6])
          2'h0:    s_uio_oe[7] = sda_padoen_o;
          2'h1:    s_uio_oe[7] = lisa_portc_dir_i[3];
-         2'h2:    s_uio_oe[7] = sio_oe[3];            // DQ3
+         2'h2:    s_uio_oe[7] = psram_mod ? 1'b1 : sio_oe[3];            // DQ3
          2'h3:    s_uio_oe[7] = sio_oe[3];
       endcase
    end

@@ -80,6 +80,7 @@ async def test_lisa(dut):
     await send_tx_byte(dut, 0x0a)
 
     # Read the LF
+    dut._log.info("await_rx_byte")
     retval = await read_rx_byte(dut)
     dut._log.info(f'retval = 0x{int(retval):02x}')
 
@@ -90,6 +91,43 @@ async def test_lisa(dut):
     # Read the CR
     retval = await read_rx_byte(dut)
     dut._log.info(f'retval = 0x{int(retval):02x}')
+
+    await send_tx_byte(dut, 0x76)
+
+    # Receive lisav1.2
+    ver = ''
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+    retval = await read_rx_byte(dut)
+    dut._log.info(f'retval = 0x{int(retval):02x}')
+    ver += chr(retval)
+
+    dut._log.info(f'Debugger version: {ver}')
 
     dut._log.info("all good!")
 
