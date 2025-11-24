@@ -5,7 +5,7 @@ project:
   discord:      "busy_courgette_50064"
   description:  "8-Bit Microcontroller SOC with 128 bytes DFFRAM module"
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     22000000       # Clock frequency in Hz (or 0 if not applicable)
+  clock_hz:     18000000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 340x160 uM.
   tiles: "3x4"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 3x4 or 4x4
