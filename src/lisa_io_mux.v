@@ -120,6 +120,7 @@ module lisa_io_mux
 `endif
 
    // QSPI I/O signals
+   input  wire             psram_mod,
    input  wire             sclk,                // SPI clock input
    input  wire [1:0]       ce,                  // SPI Chip Enables
    output wire             sio0_si_mosi_i,      // QUAD input from selected pin(s)
@@ -175,8 +176,8 @@ module lisa_io_mux
    // ==========================================================================
    assign sio0_si_mosi_i = uio_in[1];
    assign sio1_so_miso_i = uio_in[2];
-   assign sio2_i         = uio_in[6];
-   assign sio3_i         = uio_in[7];
+   assign sio2_i         = psram_mod ? uio_in[4] : uio_in[6];
+   assign sio3_i         = psram_mod ? uio_in[5] : uio_in[7];
 
    // ==========================================================================
    // Assign the RX receive pin
@@ -229,26 +230,30 @@ module lisa_io_mux
    assign periph_sel1[0] = uart2_tx;
    assign periph_sel1[1] = uart2_tx;
    assign periph_sel1[2] = uart2_tx;
+   assign periph_sel1[3] = uart2_tx;
+   assign periph_sel1[5] = uart2_tx;
+   assign periph_sel1[6] = uart2_tx;
+   assign periph_sel1[7] = uart2_tx;
 `else
    assign periph_sel1[0] = 1'b0;
    assign periph_sel1[1] = 1'b0;
    assign periph_sel1[2] = 1'b0;
-`endif
    assign periph_sel1[3] = 1'b0;
-   assign periph_sel1[4] = rx_sel == 2'h1 ? debug_tx : 1'b1;
    assign periph_sel1[5] = 1'b0;
    assign periph_sel1[6] = 1'b0;
    assign periph_sel1[7] = 1'b0;
+`endif
+   assign periph_sel1[4] = rx_sel == 2'h1 ? debug_tx : 1'b1;
 
    // Assign peripheral select 2 signals
-   assign periph_sel2[0] = 1'b0;
-   assign periph_sel2[1] = 1'b0;
-   assign periph_sel2[2] = 1'b0;
-   assign periph_sel2[3] = 1'b0;
-   assign periph_sel2[4] = rx_sel == 2'h1 ? debug_tx : 1'b0;
-   assign periph_sel2[5] = 1'b0;
-   assign periph_sel2[6] = 1'b0;
-   assign periph_sel2[7] = 1'b0;
+   assign periph_sel2[0] = 1'b1;
+   assign periph_sel2[1] = 1'b1;
+   assign periph_sel2[2] = 1'b1;
+   assign periph_sel2[3] = 1'b1;
+   assign periph_sel2[4] = rx_sel == 2'h1 ? debug_tx : 1'b1;
+   assign periph_sel2[5] = 1'b1;
+   assign periph_sel2[6] = 1'b1;
+   assign periph_sel2[7] = 1'b1;
 
    // ==============================================================
    // Assign final output pins from the generated MUXes
@@ -286,14 +291,14 @@ module lisa_io_mux
       case (io_mux_bits[1:0])
          2'h1:    s_uio_out[4] = lisa_portc_i[0];
          2'h2:    s_uio_out[4] = scl_pad_o;
-         2'h3:    s_uio_out[4] = ce[1];
+         2'h3:    s_uio_out[4] = psram_mod ? sio2_o : ce[1];
          default: s_uio_out[4] = 1'b0;
       endcase
 
       // UIO bit 5
       case (io_mux_bits[3:2])
          2'h1:    s_uio_out[5] = lisa_portc_i[1];
-         2'h2:    s_uio_out[5] = sda_pad_o;
+         2'h2:    s_uio_out[5] = psram_mod ? sio3_o : sda_pad_o;
          2'h3:    s_uio_out[5] = 1'b0;
          default: s_uio_out[5] = 1'b0;
       endcase
@@ -302,7 +307,7 @@ module lisa_io_mux
       case (io_mux_bits[5:4])
          2'h0:    s_uio_out[6] = scl_pad_o;
          2'h1:    s_uio_out[6] = lisa_portc_i[2];
-         2'h2:    s_uio_out[6] = sio2_o;
+         2'h2:    s_uio_out[6] = psram_mod ? ce[1] : sio2_o;
          2'h3:    s_uio_out[6] = sio2_o;
       endcase
 

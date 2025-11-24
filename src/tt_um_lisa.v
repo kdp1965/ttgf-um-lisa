@@ -94,6 +94,7 @@ module tt_um_lisa
    // ==========================================================================
    wire [15:0]          output_mux_bits;     // Output select bits per output
    wire [7:0]           io_mux_bits;         // I/O select bits per BIDIR
+   wire                 psram_mod;           // Select PSRAM pinout
 
    // ==========================================================================
    // Processor Instruction RAM bus
@@ -718,6 +719,7 @@ module tt_um_lisa
       // I/O Mux Bits                                        
       .output_mux_bits           ( output_mux_bits           ),
       .io_mux_bits               ( io_mux_bits               ),
+      .psram_mod                 ( psram_mod                 ),
 
       // Cache control
       .cache_disabled            ( cache_disabled            ),
@@ -797,6 +799,7 @@ module tt_um_lisa
       .rx_sel                    ( rx_sel                    ),
       .output_mux_bits           ( output_mux_bits           ),
       .io_mux_bits               ( io_mux_bits               ),
+      .psram_mod                 ( psram_mod                 ),
 
       // Debug UART signals
       .rx1                       ( rx1_r2                    ), // Input from the UART

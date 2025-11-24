@@ -74,6 +74,7 @@ module debug_regs
 
    output reg  [15:0]         output_mux_bits,
    output reg  [7:0]          io_mux_bits,
+   output reg                 psram_mod,
 
    output reg                 cache_disabled,
    output reg  [1:0]          cache_map_sel,
@@ -122,6 +123,7 @@ module debug_regs
          plus_guard_time   <= 4'h1;
          output_mux_bits   <= 16'h0;
          io_mux_bits       <= 8'h0;
+         psram_mod         <= 1'b0;
          cache_disabled    <= 1'b0;
          cache_map_sel     <= 2'h3;
          spi_clk_div       <= 4'h0;
@@ -148,7 +150,7 @@ module debug_regs
                4'h9: cmd_quad_write_r <= dbg_di[7:0];
                4'ha: plus_guard_time <= dbg_di[3:0];
                4'hb: output_mux_bits <= dbg_di;
-               4'hc: io_mux_bits <= dbg_di[7:0];
+               4'hc: {psram_mod, io_mux_bits} <= dbg_di[8:0];
                4'hd: {inst_cache_invalidate, data_cache_invalidate, data_cache_flush,
                         cache_disabled, cache_map_sel} <= dbg_di[5:0];
    
@@ -191,7 +193,7 @@ module debug_regs
          4'h9: dbg_do = {8'h0, cmd_quad_write_r};
          4'ha: dbg_do = {12'h0, plus_guard_time};
          4'hb: dbg_do = output_mux_bits;
-         4'hc: dbg_do = {8'h0, io_mux_bits};
+         4'hc: dbg_do = {7'h0, psram_mod, io_mux_bits};
          4'hd: dbg_do = {10'h0, inst_cache_invalidate, data_cache_invalidate,
                          data_cache_flush, cache_disabled, cache_map_sel};
          4'he: dbg_do = {3'h0, spi_mode, spi_ce_delay, spi_clk_div};
