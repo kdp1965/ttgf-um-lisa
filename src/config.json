@@ -44,6 +44,9 @@
   "//": "Don't put clock buffers on the outputs",
   "DESIGN_REPAIR_BUFFER_OUTPUT_PORTS": 0,
 
+  "//": "Fix antenna violations",
+  "DRT_ANTENNA_REPAIR_ITERS": 1,
+
   "//": "Reduce wasted space",
   "TOP_MARGIN_MULT": 1,
   "BOTTOM_MARGIN_MULT": 1,
